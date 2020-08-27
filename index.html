@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lançamentos</title>
+    <link rel="stylesheet" href="main.css"/>
+    <link rel="icon" href="img/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body onload="lancamentos();">
+    <nav class="navbar">
+        <span class="navbar-brand bold">ABC Brokers</span>
+    </nav>
+
+    <ul class="flex-container space-between">
+        <li class="flex-item">
+            <img src="img/logo.png" alt="Logo" style="height: 2.2rem; width: 2.2rem;">
+        </li>
+        <li class="flex-item" style="width: 420px;">
+            <a class="color" onclick="lancamentos();" href="#">Geral</a><a class="color" onclick="porMes();" href="#">Mês</a><a class="color" onclick="porCategoria();" href="#">Categoria</a>
+        </li>
+        <li class="flex-item"></li>
+    </ul>   
+
+    <hr>
+
+    <div id="conteudo">
+    	<div class="containerTit">            
+    		<div id="titulo"></div>
+        </div>    
+        <div id="tabela"></div>
+    </div>
+    
+    <script> 
+        function lancamentos() {            
+            var meses = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            var conteudo =  "<table id='tabela'><tr>" +
+                                "<th class='purple'>ORIGEM</th>" +
+                                "<th class='purple'>CATEGORIA</th>" +
+                                "<th class='purple'>MÊS</th>" +
+                                "<th class='purple'>VALOR</th>" +
+                            "<tr>";
+            var categorias = ['0'];
+            
+            $.getJSON("http://localhost:8080/categorias", function(data) {
+                var quantidade = 0;
+                $.each(data, function (key, item) {
+                    categorias.push(item.nome);
+                    quantidade++;
+                })
+                categorias[0] = quantidade;
+            })
+                            
+            $.getJSON("http://localhost:8080/lancamentos", function(data) {
+                var quantidade = 0;
+                $.each(data, function (key, item) {
+                    quantidade++;
+                    var valor = item.valor.toFixed(2);
+                    valor = valor.replace(".", ",");
+                    for (var i = 1; i <= 12; i++) {
+                        if (item.mes == i) {
+                            var mes = meses[i];
+                        }
+                    }
+
+                    for (var j = 1; j <= categorias[0]; j++) {
+                        if (item.categoria == j) {
+                            var categoria = categorias[j];
+                        }
+                    }
+
+                    conteudo += "<tr class='trH'>" + 
+                                    "<td>" + item.origem + "</td>" + 
+                                    "<td class='trH'>" + categoria + "</td>" +
+                                    "<td class='trH'>" + mes + "</td>" +
+                                    "<td class='trH'>R$" + valor + "</td>" +
+                                "</tr>";
+                })
+
+                conteudo += "</table>"
+
+                titulo = "<h3 class='purple'>Lançamentos</h3>" +
+                        "<h6>Total de " + quantidade + " lançamentos.</h6>";
+
+                $('#titulo').html(titulo);
+                $('#tabela').html(conteudo);
+            });
+        }
+
+        function porMes() {
+            var meses = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            var conteudo =  [''];
+            var categorias = ['0'];
+
+            $.getJSON("http://localhost:8080/categorias", function(data) {
+                var quantidade = 0;
+                $.each(data, function (key, item) {
+                    categorias.push(item.nome);
+                    quantidade++;
+                })
+                categorias[0] = quantidade;
+            })
+                            
+            $.getJSON("http://localhost:8080/lancamentos", function(data) {
+                var quantidade = 0;
+                for (var index = 1; index <= 12; index++) {
+                    mes = meses[index];
+                    conteudoMes = "";
+                    conteudo[index] = "<h3 class='purple'>" + mes + "</h3>" +
+                                        "<table id='tabela'>" +
+                                            "<tr>" +
+                                                "<th class='purple origem'>ORIGEM</th>" +
+                                                "<th class='purple origem'>CATEGORIA</th>" +
+                                                "<th class='purple'>VALOR</th>" +
+                                            "<tr>";
+
+                    $.each(data, function (key, item) {
+                        if (item.mes == index) {
+                            quantidade++;
+                            var valor = item.valor.toFixed(2);
+                            valor = valor.replace(".", ",");
+                            for (var j = 1; j <= categorias[0]; j++) {
+                                if (item.categoria == j) {
+                                    var categoria = categorias[j];
+                                }
+                            }
+
+                            for (var i = 1; i <= 12; i++) {
+                                if (item.mes == i) {
+                                    var mes = meses[i];
+                                }
+                            }
+
+                            conteudoMes += "<tr class='trH'>" + 
+                                            "<td>" + item.origem + "</td>" + 
+                                            "<td class='trH'>" + categoria + "</td>" +
+                                            "<td class='trH'>R$" + valor + "</td>" +
+                                        "</tr>";
+                        }
+                    })
+
+                    if (conteudoMes != "") 
+                        conteudo[index] += conteudoMes + "</table>";
+                    else
+                        conteudo[index] = '';
+                }
+                $('#titulo').html('');
+                $('#tabela').html(conteudo);
+            });
+        }
+
+        function porCategoria() {            
+            var meses = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            var conteudo =  [''];
+            var categorias = ['0'];
+
+            $.getJSON("http://localhost:8080/categorias", function(data) {
+                var quantidade = 0;
+                $.each(data, function (key, item) {
+                    categorias.push(item.nome);
+                    quantidade++;
+                })
+                categorias[0] = quantidade;
+            })
+                            
+            $.getJSON("http://localhost:8080/lancamentos", function(data) {
+                var quantidade = 0;
+                for (var index = 1; index <= categorias[0]; index++) {
+                    categoria = categorias[index];
+                    conteudoCategoria = "";
+                    conteudo[index] = "<h3 class='purple'>" + categoria + "</h3>" +
+                                        "<table id='tabela'>" +
+                                            "<tr>" +
+                                                "<th class='purple origem'>ORIGEM</th>" +
+                                                "<th class='purple'>MÊS</th>" +
+                                                "<th class='purple'>VALOR</th>" +
+                                            "<tr>";
+
+                    $.each(data, function (key, item) {
+                        if (item.categoria == index) {
+                            quantidade++;
+                            var valor = item.valor.toFixed(2);
+                            valor = valor.replace(".", ",");
+                            for (var j = 1; j <= categorias[0]; j++) {
+                                if (item.categoria == j) {
+                                    var categoria = categorias[j];
+                                }
+                            }
+
+                            for (var i = 1; i <= 12; i++) {
+                                if(item.mes == i) {
+                                    var mes = meses[i];
+                                }
+                            }
+
+                            conteudoCategoria += "<tr class='trH'>" + 
+                                                    "<td>" + item.origem + "</td>" + 
+                                                    "<td class='trH origem'>" + mes + "</td>" +
+                                                    "<td class='trH'>R$" + valor + "</td>" +
+                                                "</tr>";
+                        }
+                    })
+                    
+                    if (conteudoCategoria != "")
+                        conteudo[index] += conteudoCategoria + "</table>";
+                    else
+                        conteudo[index] = '';
+                }
+                $('#titulo').html('');
+                $('#tabela').html(conteudo);
+            });
+        }   
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+</body>
+</html>

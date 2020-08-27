@@ -1,0 +1,125 @@
+* {
+    font-family: 'Roboto', sans-serif !important;
+}
+
+hr {
+    margin: 7px !important;
+}
+
+.navbar {
+    background-color: blueviolet;
+    height: 3.5rem;    
+}
+
+span.navbar-brand {
+    font-size: 1rem;
+    color: white;
+}
+
+.space-between { 
+    justify-content: space-between; 
+}  
+
+.flex-item {
+    background: white;
+    padding: 5px;
+    width: 100px;
+    height: 60px;
+    margin: 5px;
+    line-height: 50px;
+    font-weight: bold;
+    font-size: 2em;
+    text-align: center;
+}
+
+.flex-container {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+}
+
+a {
+    text-align: center;
+    font-size: 1rem;
+    margin: 10px;
+    color: gray !important;
+    text-decoration: none !important;
+
+    padding: 26px 0px;
+}
+
+a:hover {
+    color: blueviolet !important;
+
+    border-bottom: 2px solid blueviolet;
+    -webkit-transition: border-bottom 75ms ease-in-out;
+    -moz-transition: border-bottom 75ms ease-in-out;
+    -o-transition: border-bottom 75ms ease-in-out;
+    transition: border-bottom 75ms ease-in-out;
+}
+
+.bold{font-weight: 500}
+
+table {
+    width: 80%;
+    margin: auto;
+    border-collapse: collapse; 
+}
+
+tr.trH {
+    border-bottom: 0.5px solid #b697e6; 
+    border-left: 4px solid #fff;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+
+    -webkit-transition: border-left 75ms ease-in-out 75ms;
+    -moz-transition: border-left 75ms ease-in-out 75ms;
+    -o-transition: border-left 75ms ease-in-out 75ms;
+    transition: border-left 75ms ease-in-out 75ms;
+}
+
+tr.trH:hover {
+    border-left: 4px solid blueviolet;
+
+    -webkit-transition: border-left 75ms ease-in-out 75ms;
+    -moz-transition: border-left 75ms ease-in-out 75ms;
+    -o-transition: border-left 75ms ease-in-out 75ms;
+    transition: border-left 75ms ease-in-out 75ms;
+}
+
+.center{text-align: center;}
+.purple{color: #5c3f8a;}
+
+.containerTit{display: flex; justify-content: space-between; align-items: center}
+
+@media(max-width: 515px){
+    .containerTit{display: block;}
+}
+
+td {font-size: 0.9rem}
+
+h3 {
+    font-weight: bold !important;
+    padding: 30px 7px 5px 5px;
+    margin-left: 30px;
+}
+
+h6 {
+    padding: 7px 7px 5px 5px;
+    margin-left: 30px;
+}
+
+th, td {
+    padding: 10px !important;
+}
+
+select {
+    width: 250px !important; 
+    margin: 10px 50px 0 0 !important; 
+    float: right !important;
+}
+
+th.origem {
+    width: 500px;
+}
